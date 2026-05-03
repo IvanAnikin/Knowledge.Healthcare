@@ -1,0 +1,10 @@
+{
+  "name": "knowledge-healthcare",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Convenience scripts for the Knowledge.Healthcare control layer",
+  "scripts": {
+    "dashboard": "python3 scripts/generate_dashboard.py",
+    "dashboard:open": "python3 scripts/generate_dashboard.py && open dashboards/task-dashboard.html"
+  }
+}

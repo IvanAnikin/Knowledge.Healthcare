@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.opencode/node_modules/
+.opencode/package-lock.json
+.opencode/package.json
+.opencode/bun.lock
+
+# Environment & credentials — never commit these
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.*
+*secret*
+*credential*
+*password*
+*api_key*
+
+# macOS
+.DS_Store
+**/.DS_Store
+._*
+
+# VS Code
+.vscode/settings.json
+.vscode/launch.json
+
+# Logs & temp
+*.log
+*.tmp
+*.swp
+tmp/
+temp/

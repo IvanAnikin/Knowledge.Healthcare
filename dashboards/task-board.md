@@ -1,0 +1,120 @@
+# Task Board
+
+> Update this file as tasks move through the lifecycle. Each entry is a task ID and short title.
+> Canonical states: `inbox` → `triaged` → `active` → `done` → `tested` → `deployed` | `backlog` (deferred)
+
+## Inbox
+
+<!-- New tasks not yet triaged. -->
+
+| ID | Title | App | Priority | Type | Notes |
+|----|-------|-----|----------|------|-------|
+
+## Triaged
+
+<!-- Tasks that have been assessed but not started. -->
+
+| ID | Title | App | Priority | Type | Notes |
+|----|-------|-----|----------|------|-------|
+| TASK-0038 | kh_agent — Retrieval & Telemetry Spike for the KH Control Layer | cross-app | high | infra | Spec approved (SPEC-KH-AGENT-001). Closes two `current-priorities.md` blockers: "no observability" and "manual growing agent reading list". Purely additive; no production app repos touched. Phased: ingest → retrieve CLI → token-tracking LLM client → (Iteration 2 deferred). Recommended status: **active**. Task file: [`tasks/triage/TASK-0038.md`](../tasks/triage/TASK-0038.md). Spec: [`specs/cross-app/kh-agent-spike-spec.md`](../specs/cross-app/kh-agent-spike-spec.md). |
+| TASK-0036 | Improve Medical Report Quality — Prompt Engineering (5 issues: irrelevant content, section misplacement, allergy hallucination safety, cooperation boilerplate, dosage paraphrase) | app-2 | critical | bug | Prompt-only scope. Clinical safety issue (allergy hallucination in AA) included. 3-tier testing required: unit prompt assertions, before/after regression on 4 real reports, manual sign-off by Dr. Jan Brož. Needs spec. Task file: [`tasks/triage/TASK-0036.md`](../tasks/triage/TASK-0036.md). |
+| TASK-0037 | Include transcript alongside report in outgoing email (transcript first, report beneath, single email) | app-2 | medium | feature | **`active` — ready for execution.** Spec approved 2026-05-02; all open questions closed. Locked decisions: inline plain-text body (no attachment, no size cap), additive optional `transcript` field on `/send-report-email` (Pydantic `extra` policy unchanged), Czech headings `--- Přepis ---` / `--- Lékařská zpráva ---`, GDPR posture unchanged. Affects 4 files (backend `main.py`, `test_email_endpoint.py`, mobile `report_service.dart`, `session_provider.dart`). Spec: [`specs/app-2/SPEC-0037-transcript-in-email.md`](../specs/app-2/SPEC-0037-transcript-in-email.md). Task file: [`tasks/active/TASK-0037.md`](../tasks/active/TASK-0037.md). |
+
+
+## Active
+
+<!-- Tasks currently being worked on. -->
+
+| ID | Title | App | Priority | Type | Notes |
+|----|-------|-----|----------|------|-------|
+| TASK-0037 | Include transcript alongside report in outgoing email | app-2 | medium | feature | Moved from Triaged on 2026-05-02 after spec approval. See spec [`specs/app-2/SPEC-0037-transcript-in-email.md`](../specs/app-2/SPEC-0037-transcript-in-email.md) and task [`tasks/active/TASK-0037.md`](../tasks/active/TASK-0037.md) for the full implementation plan and acceptance criteria. |
+
+## Backlog
+
+<!-- Tasks deferred for later. -->
+
+| ID | Title | App | Priority | Type | Notes |
+|----|-------|-----|----------|------|-------|
+| TASK-0006 | Investigate Demo Page Slow Initial Load | app-3 | low | investigation | Deferred. Revisit during backend consolidation evaluation. app-3 scope only. |
+
+## Done
+
+<!-- Implementation complete; not yet validated/tested. -->
+
+| ID | Title | App | Priority | Completed | Notes |
+|----|-------|-----|----------|-----------|-------|
+| TASK-0015 | Create ANOTE marketing brief | cross-app | medium | 2026-04-24 | Marketing campaign files were located and retained in the correct knowledge-base area under `applications/` (`.md`, `.txt`, `.pdf`). The markdown brief remains the canonical editable source; the PDF was not directly readable in this session, but the `.md` and `.txt` content confirmed the deliverable is complete. |
+| TASK-0019 | Replace ANOTE Logo Across Web Favicon and Mobile App Icons | cross-app | high | 2026-04-26 | New ANOTE logo propagated from `ANOTE_mobile/logo.PNG` to ANOTE-web (`favicon.ico` regenerated multi-size, plus new `icon.png` 512, `apple-icon.png` 180 RGB, `icon.svg`) and to ANOTE_mobile Android (5 mipmap densities) and iOS (all 15 `AppIcon.appiconset` entries flattened to RGB). Validation: `npx tsc --noEmit` and `npm run build` clean on ANOTE-web; `flutter analyze` showed only pre-existing test-only `info` lints. Android notification small icon intentionally not generated — requires a brand-approved monochrome master and is recorded as a follow-up. **Addendum 2026-04-27:** rounded corners (22.5%, transparent outside) baked into all four ANOTE-web icons; full Android adaptive icon added (`mipmap-anydpi-v26/ic_launcher.xml` + `ic_launcher_round.xml`, `values/ic_launcher_background.xml` = `#FFFFFF`, `ic_launcher_foreground.png` at 5 densities); legacy `ic_launcher.png` re-baked with rounded corners as Android <8 fallback; iOS skipped (Apple HIG: opaque + system mask). Re-validated: `npm run build` clean, `flutter analyze` baseline unchanged at 14 pre-existing issues. |
+| TASK-0035 | Fix App State Reset When Starting a New Recording After Stopping a Previous One | app-2 | high | 2026-05-01 | Root cause: Journey B (`Stop → report → Start`) ran `startNewRecording()` then `startRecording()` separately; `startNewRecording` reset `state = SessionState()` clobbering `isModelLoaded` and never cleared private notifier fields (`_lastAutoSavedTranscript`, `_offlineFallbackModel`, `_cloudPartialIndex`). Fix: strengthened `resetSession()` to clear those fields and preserve `isModelLoaded`; added canonical `restartRecording()` and routed `_saveAndClear(thenStartRecording: true)` through it; defensive auto-reset at top of `startRecording()` if dirty. Tests: +3 unit tests (Journey A vs B SessionState equality, isModelLoaded preserved, auto-reset from dirty); new `integration_test/journey_b_test.dart` (device-grade, not run — no hardware in session). Validation: `flutter analyze` 14 issues (baseline unchanged), `flutter test` `+113 -5` (was `+99 -16`; +14 new passing, no regressions; remaining 5 pre-existing failures unrelated to TASK-0035). Local commit `2059934` on `main` (not pushed). **Manual device validation on Samsung Galaxy S8 not performed (no hardware available); recommended before promotion to `tested`/`deployed`.** Task file: [`tasks/done/TASK-0035.md`](../tasks/done/TASK-0035.md). |
+
+## Tested
+
+<!-- Validated sufficiently (automated and/or manual). -->
+
+| ID | Title | App | Priority | Tested | Notes |
+|----|-------|-----|----------|--------|-------|
+| TASK-0020 | Create Initial Documentation Set for Health-Analysis | app-4 | high | 2026-04-25 | User-supplied implementation summary confirmed all six foundation docs were created, including Mermaid architecture, milestone-based implementation plan, phased roadmap, coherent stack recommendation, CGM-first MVP scope, safety framing, and documented risks/open questions. |
+| TASK-0021 | Health-Analysis repository foundation | app-4 | high | 2026-04-26 | Later full-stack validation across the completed app-4 flow confirmed the monorepo foundation remains sound in practice. User-reported checks passed with `pytest` (`49 passed` at that point), `ruff check .`, `npm test`, `npx tsc --noEmit`, and `npm run test:e2e`. |
+| TASK-0022 | Health-Analysis ingest, preview, and mapping slice | app-4 | high | 2026-04-26 | End-to-end automated and manual verification now exercises the upload -> preview -> mapping -> validation path successfully. User-reported evidence includes `pytest` (`49 passed`), frontend unit/type checks, and `npm run test:e2e` (`4 passed`) covering the expected upload/mapping/validation behavior. |
+| TASK-0023 | Health-Analysis CGM validation and normalization slice | app-4 | high | 2026-04-26 | The deterministic validation boundary is now covered by the validated end-to-end flow: expected warning-only validation, normalized data feeding analytics, and the resulting data-quality/assumption output on the analysis page. User-reported checks included backend/frontend automated tests plus `4` passing Playwright scenarios. |
+| TASK-0024 | Health-Analysis CGM analytics core | app-4 | high | 2026-04-26 | User-supplied implementation summary plus backend validation confirmed the deterministic CGM analytics engine is complete with versioned `CgmAnalysisResult`, reproducibility-focused tests (`34 passed`), documented assumptions for TIR continuity and episode-gap handling, and heuristic post-meal output carried explicitly in the result. |
+| TASK-0025 | Health-Analysis charts and analysis page | app-4 | high | 2026-04-26 | User-supplied implementation summary plus backend/frontend validation and manual local app verification confirmed the end-to-end analysis surface works: `/api/v1/analyses`, analysis page, statistics tables, and 7 Plotly charts all render successfully from deterministic CGM results. |
+| TASK-0026 | Health-Analysis LLM summary and audit slice | app-4 | high | 2026-04-26 | User-reported implementation and validation confirm the Azure OpenAI-backed summary layer, provider abstraction, structured prompt contract, file-backed audit log, summary persistence, and analysis-page LLM panel are all in place. Reported validation: `cd api && source .venv/bin/activate && pytest` -> `51 passed`, `ruff check .` clean, `cd web && npx tsc --noEmit` clean, `cd web && npx vitest run` -> `1 passed`. |
+| TASK-0029 | Redesign Health-Analysis UI/UX with a modern dashboard-inspired visual system | app-4 | medium | 2026-04-26 | User-reported implementation and validation confirm the app-4 web frontend now uses a shared dark-mode-first visual system with glass panels, rounded surfaces, ambient background lights, persisted theme toggle, clearer step-based upload flow, summary-first analysis layout, theme-aware charts, and reduced-motion support. Reported validation: `npm run lint`, `npm run typecheck`, `npm test` (`1/1 passed`), and `npm run build` (`4/4 pages generated`). |
+| TASK-0031 | Dynamic top-down loading and foldable Episodes table in Analysis window | app-4 | medium | 2026-04-29 | Validation gate green. `pytest` 69/69, `ruff` clean, `npm run lint`/`typecheck`/`build` clean, vitest 18/18 (3 files: `format.test.ts` 9, `page.test.tsx` 4, `EpisodesTable.test.tsx` 5), Playwright `npm run test:e2e` 4/4 passing post-snapshot-refresh and clean on re-run. Two stale assertions in `web/e2e/analysis.spec.ts` repaired alongside the refresh: `cgm v1.0.0`→`cgm v1.1.0` (TASK-0030 module bump) and the heuristic-badge locator switched from `h3 span` to `.badge-heuristic` (badge is now a sibling of `<h3>` inside `.panel-title` after TASK-0029 redesign). Episodes-table sanity confirmed: empty-state renders no disclosure button, `aria-expanded`/`aria-controls`/`role="region"`/`aria-label="Episodes table"` semantics correct, windowing thresholds 200 / 1000 match spec. English copy preserved byte-identical (`Episodes (N)`, `N total · M hypo · K hyper`, `hypo`/`hyper`, `Show table`/`Hide table`, `heuristic`). Snapshot regenerated: `web/e2e/analysis.spec.ts-snapshots/analysis-page-chromium-darwin.png` (page height 5647→7857 px reflecting collapsed Episodes disclosure, Monthly comparison + Recent meals tables, EN\|CS header, ChartSkeleton placeholder). Broz pipeline smoke re-confirmed: `module_version=1.1.0`, readings=1955, meals=57, recent_events=57. |
+| TASK-0030 | Add Broz CSV sample type and analysis views for monthly comparison and post-meal response | app-4 | high | 2026-04-29 | Promoted from Done after the 2026-04-29 validation pass. Backend (Czech LibreView double-quoted-line loader fix, `PostMealEvent`/`RecentMealEvents` models, `compute_recent_meal_events` 14-day window with ±12-min offset tolerance, `MODULE_VERSION` 1.0.0→1.1.0) and frontend (transposed `MonthlyComparisonTable`, `RecentMealsTable` with heuristic framing) verified end-to-end. Validation: `pytest` 69/69 incl. `test_broz_pipeline.py` (7 TASK-0030 cases), `npm run lint`/`typecheck`/`test`/`build` clean, Playwright snapshot now bakes in monthly-comparison + recent-meals tables (`analysis-page-chromium-darwin.png` 7857 px), Broz pipeline smoke re-confirmed (`module_version=1.1.0`, 1955 readings, 57 meals, 57 recent events). |
+| TASK-0032 | Add language switch with Czech language support | app-4 | high | 2026-04-29 | Promoted from Done after the 2026-04-29 validation pass. In-house ~30-LOC i18n (`web/lib/i18n/`) with `en`/`cs` dictionaries, `LocaleProvider`/`useT`/`useFormatters`, segmented `LanguageSwitch` (EN \| CS) in `AppHeader`, `localStorage` persistence with pre-paint bootstrap mirroring to `<html lang>`. All UI strings on `/` and `/analysis/[id]` dictionary-backed; numbers/percents/timestamps locale-aware (en byte-identical legacy formatting; cs `Intl` with comma decimals). Czech CGM logical-field labels match Broz CSV headers verbatim, satisfying the TASK-0033 vocabulary contract. Validation: `npm run lint`/`typecheck`/`build` clean, vitest 18/18 incl. `format.test.ts` (9) and cs-mode `page.test.tsx`, Playwright snapshot baked in EN\|CS chrome with English copy byte-identical. 8 `// TODO(i18n-review)` Czech-clinical-wording markers + LLM summary localization remain as deliberately-deferred follow-ups (not gating). |
+| TASK-0033 | Automatic mapping of Broz CSV inputs to Czech-localized field names | app-4 | high | 2026-04-29 | Promoted from Done after the 2026-04-29 validation pass. Backend: `api/app/ingest/profiles.py` with `detect_source_profile`, `PROFILE_FIELD_HEADERS` for `broz_libreview_cs`/`libreview_en`/`generic`; exact-match + diacritic-sensitive detection on three required Czech headers; confidence `high` needs ≥2 optional headers; `UploadResponse` extended with `source_profile`, `source_profile_confidence`, `source_profile_notes`, `suggested_mapping`. Frontend: `buildSeededMapping` prefers `suggested_mapping`, `autoMappedFields` drives per-row badges; `auto-detected` badge on dataset-type select; user edit clears badge. Validation: `pytest` 69/69 incl. `test_ingest_profiles.py` (25 TASK-0033 cases), ruff clean on TASK-0033 files, `npm run lint`/`typecheck`/`build` clean, vitest 18/18 incl. 2 page tests for Broz seed + generic fallback. **Caveat:** Broz upload path doesn't intersect the analysis-page snapshot, so visual confirmation is partial — full e2e on the Broz upload path remains a separate follow-up. |
+
+## Deployed
+
+<!-- Live in intended environment. -->
+| ID | Title | App | Priority | Deployed | Notes |
+|----|-------|-----|----------|----------|-------|
+| TASK-0034 | Append mandatory Czech safety disclaimer beneath dose modification recommendations in Diabetický poradce 2 | app-1 | high | 2026-05-01 | Live on Azure App Service `medical-advisor-cz` at https://medical-advisor-cz.azurewebsites.net. Deployment ID: `e7d0e90f-d415-4529-be7f-08c6d6ebf3ae` (ZIP deploy via `az webapp deploy`). Azure state: Running. `dotnet test`: 104 passed, 0 failed. Production check: diabetes-2 dose answer rendered full long Czech disclaimer including "na rozdíl o vašeho lékaře" ✅. **Caveat:** deploy published the full working tree (uncommitted local changes beyond TASK-0034 were present); TASK-0034 itself is verified working in production. Follow-up: commit working tree to capture deployed state in version control. Task file: [`tasks/done/TASK-0034.md`](../tasks/done/TASK-0034.md). |
+| TASK-0001 | Correct Offline and Privacy Messaging; Update Transcription Mode Copy | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; production validation already confirmed the FAQ replacement, disclaimer removal, and corrected offline/privacy messaging. |
+| TASK-0002 | Update Contact Information and Simplify Contact Form | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; contact details update and `typ praxe` removal are treated as deployed on the production host. |
+| TASK-0003 | Homepage Features Section — Anamnéza Animation and Diagram Update | app-3 | medium | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; production validation already confirmed the anamnéza chips animation and workflow fork labels on the live host. |
+| TASK-0004 | Remove Pages, Sections, and Links (Impressum, Testimonials, anote.cz, Headline) | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; production validation already confirmed the impressum removal, headline update, testimonial hide, and domain cleanup. |
+| TASK-0005 | CTA Button Target and Pricing Trial Period Update | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; CTA/contact routing and pricing copy update are treated as deployed on the production host. |
+| TASK-0007 | Remove 'Používají lékaři v České republice' Container from Homepage | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; homepage LogoBar removal is treated as deployed on the production host. |
+| TASK-0008 | Remove Leftover '13 sekcí.' Text from Homepage Features Section | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; the homepage feature-copy removal is treated as deployed on the production host. |
+| TASK-0010 | Investigate and Fix CSP eval Warning (script-src blocked) | app-3 | medium | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; production validation already confirmed `'unsafe-eval'` is absent and live CSP behavior is clean. |
+| TASK-0011 | Pricing and FAQ Copy Corrections | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; pricing/FAQ copy corrections are treated as deployed on the production host. |
+| TASK-0013 | Investigate and Fix Demo Report Generation Failure in ANOTE-web | app-3 | high | 2026-04-24 | Live on Azure SWA `https://yellow-forest-086a45303.7.azurestaticapps.net`; production validation already confirmed restored demo report generation through the live SWA path. |
+| TASK-0009 | Fix Remaining Unreadable Visual in Homepage Features Section | app-3 | high | 2026-04-25 | Marked deployed after the user confirmed all current ANOTE-web `tested` tasks are now live. Prior validation already confirmed the homepage feature visual renders readable mode cards instead of loading-style bars, with successful `npx tsc --noEmit`, `npm run build`, and user confirmation. |
+| TASK-0012 | Fix Bezpečnost Page Information Architecture and Routing | app-3 | high | 2026-04-25 | Marked deployed after the user confirmed all current ANOTE-web `tested` tasks are now live. Prior validation already confirmed the dedicated `/bezpecnost` page, English `/en/security` rewrite, trust-strip routing change, removal of the inline security block from `/typy-zprav`, and sitemap coverage. |
+| TASK-0017 | Remove FAQ Section from `/cenik` Page | app-3 | medium | 2026-04-25 | Marked deployed after the user confirmed all current ANOTE-web `tested` tasks are now live. Prior validation already confirmed `/cenik` no longer renders a FAQ section while `/faq` remains unchanged, with successful `npx tsc --noEmit`, `npm run build`, and user confirmation. |
+| TASK-0018 | Remove Duplicate Pricing Header Copy from `/cenik` | app-3 | medium | 2026-04-25 | Marked deployed after the user confirmed all current ANOTE-web `tested` tasks are now live. Prior validation already confirmed `/cenik` and `/en/pricing` shared the duplicate-heading behavior and that removing the inner `Pricing.tsx` heading block resolved both locales while preserving spacing. |
+| TASK-0027 | Add More Anamneza Shortcuts to Homepage Features Animation | app-3 | medium | 2026-04-26 | Marked deployed after the user confirmed the expanded anamneza-chip animation is already live on Azure. Prior tested validation already confirmed the homepage `Features.tsx` chip set expanded from 5 to 8 labels (`NO`, `RA`, `OA`, `FA`, `AA`, `GA`, `SA`, `EA`) with successful `npx tsc --noEmit` and `npm run build`. |
+| TASK-0028 | Remove Duplicate Security Heading and Tighten Shield Top Spacing | app-3 | medium | 2026-04-26 | Marked deployed after the user confirmed the `/bezpecnost` duplicate-heading and spacing fix is already live on Azure. Prior tested validation already confirmed the inner `Privacy.tsx` heading/subheading block removal, reduced top padding, increased shield spacing, and successful `npx tsc --noEmit` plus `npm run build`. |
+| TASK-0014 | ANOTE-web demo: performance, streaming, and VAD hardening | app-3 | high | 2026-04-25 | Parent hardening task fully shipped to production. User-reported evidence confirms all five child phases (`TASK-0014-A` through `TASK-0014-E`) are live: `anote-web-api` split to its own backend/image `0.2.0`, `minReplicas=1`, pre-warm + single 5xx retry, VAD silence filtering, SSE `/report?stream=1` contract with stale-cancel/debounce, and `gpt-4o-mini-transcribe` migration on `anote-openai-swe`. |
+| TASK-0014-A | ANOTE-web demo config hardening: model selection and min replicas | app-3 | high | 2026-04-25 | Live Azure config. `anote-web-api` stays on verified `gpt-4-1-mini` with fallback `gpt-5-nano`; `minReplicas` raised from `0` to `1`; `/health` smoke returned HTTP 200 in 0.29-0.50 s. |
+| TASK-0014-B | ANOTE-web demo cold-start mitigation: pre-warm and single retry | app-3 | high | 2026-04-25 | Live in production as part of parent deployment. Demo mount now pre-warms `/api/demo/health` and `streamReport` retries one time on 5xx before surfacing an error. |
+| TASK-0014-C | ANOTE-web demo transcription hardening: VAD fallback and Czech prompt anchor | app-3 | high | 2026-04-25 | Live in production. Browser recording now uses VAD-based silence filtering with safe fallback, and the transcribe proxy includes a Czech medical prompt anchor; CSP was expanded only for the required jsDelivr/VAD runtime. |
+| TASK-0014-D | ANOTE-web demo streaming hardening: SSE, debounce, and stale request cancellation | app-3 | high | 2026-04-25 | Live in production on `anote-web-api:0.2.0`. `/report?stream=1` now returns SSE with incremental `{"text":...}`, final `{"final":...}`, and `[DONE]`; production TTFT reported at 0.38 s with stale-cancel and 30-char debounce enabled. |
+| TASK-0014-E | ANOTE-web demo transcription endpoint migration and Czech smoke validation | app-3 | medium | 2026-04-25 | Live Azure config. App 3 now uses `https://anote-openai-swe.openai.azure.com/.../gpt-4o-mini-transcribe?...api-version=2025-03-01-preview`; reported Czech smoke sample achieved WER 0 at about 1.9 s. |
+
+---
+
+## Follow-up Items (not full tasks)
+
+These are minor cleanup items noted during TASK-0001/TASK-0004 implementation. Not formal tasks — can be handled as part of a future session or the next task batch.
+
+| Item | Source | Notes |
+|------|--------|-------|
+| Replace all `// TODO: replace with production domain` comments | TASK-0004 | Azure hostname `https://yellow-forest-086a45303.7.azurestaticapps.net` used as placeholder in: `constants.ts`, `sitemap.ts`, `robots.ts`, `kontakt/page.tsx`, `Footer.tsx`, `BottomCTA.tsx`, both dict files, both `.env.example` files |
+| Re-enable testimonials section | TASK-0004 | Commented out in `src/app/[lang]/page.tsx`. Re-enable when more doctor feedback collected |
+
+---
+
+## Usage
+
+1. When a new task is created in `tasks/inbox/`, add its ID and title under **Inbox**.
+2. After triage, move it to **Triaged** (or **Backlog** if deferred).
+3. When work begins, move to **Active**.
+4. When implementation is complete, move to **Done**.
+5. After successful validation, move to **Tested**.
+6. After deployment, move to **Deployed**.
+7. Tasks may move backward if rework, re-testing, or re-deployment is needed — update the status and move the file to the appropriate folder.
+8. Move the task file to the corresponding `tasks/` subfolder whenever the status changes.
