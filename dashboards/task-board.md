@@ -27,6 +27,7 @@
 
 | ID | Title | App | Priority | Type | Notes |
 |----|-------|-----|----------|------|-------|
+| TASK-0039 | Update ANOTE App Logos Across Web and Mobile | cross-app | medium | feature | Moved from Triaged on 2026-05-07. app-3 / ANOTE-web completed from `Knowledge.Healthcare/logo.png` (`1254x1254` RGBA, transparent master): regenerated `public/favicon.ico`, `src/app/favicon.ico`, `src/app/icon.png`, `src/app/apple-icon.png`, `src/app/icon.svg`; `npm run build` clean. `src/app/opengraph-image.png` was checked and does not exist, so no OG asset changed. Deviation documented: old 22.5% rounded-square mask not re-applied because the supplied master is already a circular transparent logo. app-2 / ANOTE_mobile remains pending. Task file: [`tasks/active/TASK-0039-update-anote-logos.md`](../tasks/active/TASK-0039-update-anote-logos.md). |
 | TASK-0037 | Include transcript alongside report in outgoing email | app-2 | medium | feature | Moved from Triaged on 2026-05-02 after spec approval. See spec [`specs/app-2/SPEC-0037-transcript-in-email.md`](../specs/app-2/SPEC-0037-transcript-in-email.md) and task [`tasks/active/TASK-0037.md`](../tasks/active/TASK-0037.md) for the full implementation plan and acceptance criteria. |
 
 ## Backlog
