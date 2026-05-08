@@ -90,6 +90,12 @@ When this task is complete:
 - Deviation from the TASK-0019 rounded-corner convention: the previous 22.5% rounded-square mask was not re-applied for ANOTE-web because the supplied master is already a circular RGBA logo with transparent outer area. Preserving the provided geometry was treated as the correct brand-faithful behavior.
 - Remaining scope: app-2 / ANOTE_mobile is still pending.
 
+### 2026-05-08 — app-3 / ANOTE-web manually validated
+
+- User manually reviewed the local ANOTE-web result and confirmed the regenerated logo assets look correct.
+- This satisfies the web/browser validation portion for app-3.
+- TASK-0039 remains `active` overall because app-2 / ANOTE_mobile has not yet been updated or validated.
+
 ---
 
 ## Triage Assessment
@@ -105,7 +111,7 @@ When this task is complete:
 | **Confidence** | high — identical pattern executed successfully in TASK-0019; implementation steps are well-understood |
 | **Dependencies** | Source asset `logo.png` confirmed present at KH root. No blocking tasks. Monochrome notification icon is a known out-of-scope defer. |
 | **Recommended Status** | active |
-| **Suggested Next Action** | Finish app-2 / ANOTE_mobile asset regeneration from `logo.png`, validate with `flutter analyze`, then perform or schedule real-device validation for both app surfaces |
+| **Suggested Next Action** | Finish app-2 / ANOTE_mobile asset regeneration from `logo.png`, validate with `flutter analyze`, then complete Android/iOS validation so the full cross-app task can move to `tested` |
 
 ### Reasoning
 
