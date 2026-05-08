@@ -5,7 +5,7 @@
 - **ID:** TASK-0039
 - **Created:** 2026-05-06
 - **Author:** User (via chat submission)
-- **Status:** active
+- **Status:** done
 - **App(s):** cross-app (app-2, app-3)
 - **Priority:** medium
 - **Type:** feature
@@ -96,6 +96,33 @@ When this task is complete:
 - This satisfies the web/browser validation portion for app-3.
 - TASK-0039 remains `active` overall because app-2 / ANOTE_mobile has not yet been updated or validated.
 
+### 2026-05-08 — app-2 / ANOTE_mobile completed
+
+- Source asset confirmed again before generation: `/Users/ivananikin/Documents/Knowledge.Healthcare/logo.png` is `1254x1254`, `RGBA`, with transparency present.
+- Regenerated Android launcher assets in `/Users/ivananikin/Documents/Ivanek-Anakin/ANOTE_mobile/mobile/android/app/src/main/res/`:
+  - legacy `ic_launcher.png` at `mipmap-mdpi`, `mipmap-hdpi`, `mipmap-xhdpi`, `mipmap-xxhdpi`, `mipmap-xxxhdpi`
+  - adaptive `ic_launcher_foreground.png` at the same 5 densities, with the supplied logo centered inside the established `66/108` safe-zone ratio on a transparent canvas
+- Intentionally retained existing Android adaptive-icon wiring:
+  - `mipmap-anydpi-v26/ic_launcher.xml`
+  - `mipmap-anydpi-v26/ic_launcher_round.xml`
+  - `values/ic_launcher_background.xml` with `#FFFFFF`
+- Regenerated all 15 required iOS `AppIcon.appiconset` PNGs from `Contents.json`, flattened onto white and converted to opaque RGB per Apple requirements.
+- Validation completed:
+  - `flutter analyze` in `mobile/` remained at the pre-existing 14-issue baseline with no new issues introduced
+  - `flutter clean && flutter build apk --debug` succeeded and produced `mobile/build/app/outputs/flutter-apk/app-debug.apk`
+  - `adb install -r build/app/outputs/flutter-apk/app-debug.apk` succeeded on emulator `emulator-5554`
+  - `adb shell am start -n com.ivananikin.anote_mobile/.MainActivity` succeeded, confirming the updated package installs and launches cleanly on Android
+- Validation limits / deferrals:
+  - Android launcher-surface visual verification remained inconclusive because the emulator launcher became unstable (`System UI isn't responding`) while attempting to open the home/app-drawer surface for icon inspection
+  - iOS Simulator visual verification remained blocked by the host simulator environment (`launchd` / boot error 60)
+  - Follow-up validation ticket created: `TASK-0041` for stable-surface confirmation of deployed/favicon and mobile launcher rendering
+
+### 2026-05-08 — task closeout decision
+
+- Implementation scope for both repos is complete.
+- Remaining validation is environment/surface-specific rather than an implementation blocker.
+- TASK-0039 therefore moves to `done`, with explicit follow-up tracking in `TASK-0041` instead of keeping the asset-refresh task open indefinitely.
+
 ---
 
 ## Triage Assessment
@@ -110,8 +137,8 @@ When this task is complete:
 | **Impact** | medium |
 | **Confidence** | high — identical pattern executed successfully in TASK-0019; implementation steps are well-understood |
 | **Dependencies** | Source asset `logo.png` confirmed present at KH root. No blocking tasks. Monochrome notification icon is a known out-of-scope defer. |
-| **Recommended Status** | active |
-| **Suggested Next Action** | Finish app-2 / ANOTE_mobile asset regeneration from `logo.png`, validate with `flutter analyze`, then complete Android/iOS validation so the full cross-app task can move to `tested` |
+| **Recommended Status** | done |
+| **Suggested Next Action** | Execute `TASK-0041` to validate the refreshed logo assets on stable real/deployed surfaces: deployed ANOTE-web favicon, Android launcher icon on a stable launcher surface, and iOS Simulator/device icon after a clean build |
 
 ### Reasoning
 
@@ -119,7 +146,7 @@ When this task is complete:
 - **Urgency is soon**: a new logo has been explicitly supplied and should be applied in a timely manner to keep both applications on-brand, but there is no production incident or compliance deadline driving immediate action.
 - **Medium + Soon → Medium** per the priority matrix in `workflows/triage-process.md`.
 - **Confidence is high**: TASK-0019 produced a complete, validated execution record for exactly this operation. All affected files are known, tooling is confirmed working, and the only open questions are low-risk implementation details (image dimensions, OG image scope) that can be resolved at execution time without a separate investigation phase.
-- **Recommended status is `active`**: app-3 / ANOTE-web is done; app-2 / ANOTE_mobile remains to be executed. No spec is needed because TASK-0019 still serves as the implementation guide.
+- **Recommended status is `done`**: implementation is complete in both repos. Remaining work is validation-only and has been split into follow-up `TASK-0041` so the asset-refresh task can close cleanly.
 
 ### Cross-App Considerations
 

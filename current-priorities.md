@@ -6,7 +6,7 @@
 
 - **Resolve production domain** — Replace all `// TODO: replace with production domain` placeholders (Azure hostname) across ANOTE-web once `anote.cz` goes live.
 - **Advance App 4 beyond MVP completion** — `Health-Analysis` MVP path is fully tested; the four post-MVP slices (`TASK-0030` Broz CSV + monthly/post-meal views, `TASK-0031` progressive analysis page + foldable Episodes table, `TASK-0032` Czech i18n + language switch, `TASK-0033` Broz/LibreView Czech CSV auto-mapping) are all `tested` as of 2026-04-29. **TASK-0034** (mandatory Czech safety disclaimer beneath dose-modification recommendations in Diabetický poradce 2 / app-1) is **deployed** to `medical-advisor-cz` as of 2026-05-01 — verified live in production. Remaining app-4 follow-ups: clinician review of the 8 `// TODO(i18n-review)` Czech strings; full Playwright e2e on the Broz upload path (analysis-page snapshot doesn't intersect it).
-- **Validate TASK-0019 logo rollout on real devices** — confirm new favicon and mobile app icons render correctly on a deployed ANOTE-web build, an Android device/emulator (now using a proper adaptive icon, so verify launcher mask shape behavior across at least one stock-Android and one OEM device), and the iOS Simulator after a clean build.
+- **Validate TASK-0041 logo rollout on stable real/deployed surfaces** — TASK-0039 completed the regenerated ANOTE-web and ANOTE_mobile assets, but stable-surface visual confirmation is still outstanding for the deployed ANOTE-web favicon, Android launcher icon mask/rendering, and iOS Simulator/device icon after a clean build.
 
 ## In Progress
 
@@ -21,7 +21,7 @@
 ## Next Recommended Actions
 
 1. **Commit the `medical_advisor` working tree** — TASK-0034 was deployed from an uncommitted working tree. Commit the current state with a message capturing TASK-0034 and any other local changes so the deployed production state is traceable in version control.
-2. **Validate TASK-0019** on real surfaces — browser favicon on deployed ANOTE-web, Android launcher icon on a device/emulator after `flutter clean && flutter run`, iOS app icon on the iOS Simulator.
+2. **Validate TASK-0041** on real/stable surfaces — browser favicon on deployed ANOTE-web, Android launcher icon on a stable device/emulator launcher surface, and iOS app icon on the iOS Simulator or device after a clean build.
 3. **Provide a monochrome Android notification small icon master** for the new ANOTE logo and wire it into the `flutter_foreground_task` ForegroundService — deferred from `TASK-0019`.
 4. **Clinician review of 8 `// TODO(i18n-review)` Czech strings** in `web/lib/i18n/dictionaries/cs.ts` (TASK-0032 follow-up) — uncertain clinical wording flagged but not gating.
 5. **Full Playwright e2e on the Broz upload path** (TASK-0033 follow-up) — analysis-page snapshot doesn't intersect the upload flow; backend pytest 69/69 covers the contract but a visual upload-flow pass is still owed.
@@ -34,7 +34,9 @@
 
 ### App-3 Follow-Ups
 
-- **TASK-0019 done (cross-app)** — ANOTE-web favicon and ANOTE_mobile Android/iOS launcher icons updated to the new ANOTE logo. **Addendum 2026-04-27:** rounded corners baked into web icons; Android upgraded to a proper adaptive icon (foreground PNGs at 5 densities + `ic_launcher_background` color resource + `mipmap-anydpi-v26/ic_launcher.xml`); iOS deliberately left square per Apple HIG. Real-device/browser validation and a brand-supplied monochrome notification icon for Android remain as follow-ups.
+- **TASK-0019 done (cross-app)** — superseded by TASK-0039 for the newer `Knowledge.Healthcare/logo.png` master. The old real-device validation follow-up is now tracked under `TASK-0041`, alongside the updated TASK-0039 surfaces.
+
+- **TASK-0039 done (cross-app)** — ANOTE-web and ANOTE_mobile assets regenerated from `/Users/ivananikin/Documents/Knowledge.Healthcare/logo.png` (`1254x1254`, RGBA, transparency present). Android clean build succeeded, emulator install/launch succeeded, and iOS/Android file-level asset generation was completed. Remaining stable-surface visual validation moved to `TASK-0041` because the Android emulator launcher became unstable during icon inspection and the host iOS Simulator failed to boot cleanly.
 - **TASK-0027 deployed** — the homepage `Features.tsx` anamneza animation expansion is now reported live on Azure, showing eight chips (`NO`, `RA`, `OA`, `FA`, `AA`, `GA`, `SA`, `EA`) with no `BouncingChips.tsx` changes required.
 - **TASK-0028 deployed** — the dedicated `/bezpecnost` page fix is now reported live on Azure, keeping only the route-level `PageHeader`, removing the duplicate `Privacy.tsx` heading/subheading, and tightening the top spacing above the shield.
 - **TASK-0018 deployed** — the duplicate heading fix is now reported live. Root cause was the route-level `PageHeader` plus a second internal heading inside `Pricing.tsx`; removing the inner heading block resolved both `/cenik` and `/en/pricing` while preserving spacing.
@@ -63,6 +65,8 @@
 - **TASK-0034 deployed (2026-05-01)** — live on Azure App Service `medical-advisor-cz` (https://medical-advisor-cz.azurewebsites.net). Deployment ID `e7d0e90f-d415-4529-be7f-08c6d6ebf3ae`. Production check confirmed full Czech disclaimer including "na rozdíl o vašeho lékaře" ✅. Caveat: deployed from an uncommitted working tree; follow-up git commit recommended.
 
 ## Recently Completed
+
+- 2026-05-08: Triaged `TASK-0040` for ANOTE-web — mobile navbar background/readability bug when the hamburger menu is opened away from the top of the page. Single-app app-3 scope. Priority `medium`. Recommended status `active`. No spec recommended at triage.
 
 - 2026-05-01: TASK-0034 deployed to production. `az webapp deploy` (ZIP) to Azure App Service `medical-advisor-cz`. Deployment ID `e7d0e90f-d415-4529-be7f-08c6d6ebf3ae`. Azure state: Running. `dotnet test`: 104 passed, 0 failed. Live production check confirmed the full verbatim Czech safety disclaimer ("na rozdíl o vašeho lékaře") renders beneath dose-modification recommendations in Diabetický poradce 2. Caveat: deployed from a working tree with uncommitted local changes beyond TASK-0034; TASK-0034 itself is verified working; a git commit to capture the deployed state is a recommended follow-up.
 
