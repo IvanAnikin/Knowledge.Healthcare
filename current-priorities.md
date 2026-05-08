@@ -1,12 +1,11 @@
 # Current Priorities
 
-> Last updated: 2026-05-01
+> Last updated: 2026-05-08
 
 ## Active Goals
 
-- **Resolve production domain** — Replace all `// TODO: replace with production domain` placeholders (Azure hostname) across ANOTE-web once `anote.cz` goes live.
 - **Advance App 4 beyond MVP completion** — `Health-Analysis` MVP path is fully tested; the four post-MVP slices (`TASK-0030` Broz CSV + monthly/post-meal views, `TASK-0031` progressive analysis page + foldable Episodes table, `TASK-0032` Czech i18n + language switch, `TASK-0033` Broz/LibreView Czech CSV auto-mapping) are all `tested` as of 2026-04-29. **TASK-0034** (mandatory Czech safety disclaimer beneath dose-modification recommendations in Diabetický poradce 2 / app-1) is **deployed** to `medical-advisor-cz` as of 2026-05-01 — verified live in production. Remaining app-4 follow-ups: clinician review of the 8 `// TODO(i18n-review)` Czech strings; full Playwright e2e on the Broz upload path (analysis-page snapshot doesn't intersect it).
-- **Validate TASK-0041 logo rollout on remaining real/deployed surfaces** — TASK-0039 completed the regenerated ANOTE-web and ANOTE_mobile assets. Android emulator visual validation is now confirmed by the user; the remaining gaps are the deployed ANOTE-web favicon and iOS Simulator/device icon after a clean build.
+- **Resolve production domain** — Replace all `// TODO: replace with production domain` placeholders (Azure hostname) across ANOTE-web once `anote.cz` goes live.
 
 ## In Progress
 
@@ -21,22 +20,21 @@
 ## Next Recommended Actions
 
 1. **Commit the `medical_advisor` working tree** — TASK-0034 was deployed from an uncommitted working tree. Commit the current state with a message capturing TASK-0034 and any other local changes so the deployed production state is traceable in version control.
-2. **Validate TASK-0041** on the remaining surfaces — browser favicon on deployed ANOTE-web and iOS app icon on the iOS Simulator or device after a clean build.
-3. **Provide a monochrome Android notification small icon master** for the new ANOTE logo and wire it into the `flutter_foreground_task` ForegroundService — deferred from `TASK-0019`.
-4. **Clinician review of 8 `// TODO(i18n-review)` Czech strings** in `web/lib/i18n/dictionaries/cs.ts` (TASK-0032 follow-up) — uncertain clinical wording flagged but not gating.
-5. **Full Playwright e2e on the Broz upload path** (TASK-0033 follow-up) — analysis-page snapshot doesn't intersect the upload flow; backend pytest 69/69 covers the contract but a visual upload-flow pass is still owed.
-6. **Run/record broader application test suites** — capture verified pass/fail counts for the other apps as well, not just app-4.
-7. **Rotate the leaked GitHub PAT** `ghp_kPAeVa…Y0t85zz` immediately at `https://github.com/settings/tokens` and update any dependent automation if needed.
-8. **Replace production domain placeholders** — when `anote.cz` is confirmed live, sweep all `// TODO: replace with production domain` comments across ANOTE-web (9 locations).
-9. **Verify App 2 backend region** — confirm whether it is still West US 2 or has been migrated to West Europe.
-10. **Document the shared `anote-openai` resource** as a standalone infrastructure page.
-11. **Address the hardcoded bearer token in App 2 mobile source** before any broader distribution.
+2. **Provide a monochrome Android notification small icon master** for the new ANOTE logo and wire it into the `flutter_foreground_task` ForegroundService — deferred from `TASK-0019`/`TASK-0039`.
+3. **Clinician review of 8 `// TODO(i18n-review)` Czech strings** in `web/lib/i18n/dictionaries/cs.ts` (TASK-0032 follow-up) — uncertain clinical wording flagged but not gating.
+4. **Full Playwright e2e on the Broz upload path** (TASK-0033 follow-up) — analysis-page snapshot doesn't intersect the upload flow; backend pytest 69/69 covers the contract but a visual upload-flow pass is still owed.
+5. **Run/record broader application test suites** — capture verified pass/fail counts for the other apps as well, not just app-4.
+6. **Rotate the leaked GitHub PAT** `ghp_kPAeVa…Y0t85zz` immediately at `https://github.com/settings/tokens` and update any dependent automation if needed.
+7. **Replace production domain placeholders** — when `anote.cz` is confirmed live, sweep all `// TODO: replace with production domain` comments across ANOTE-web (9 locations).
+8. **Verify App 2 backend region** — confirm whether it is still West US 2 or has been migrated to West Europe.
+9. **Document the shared `anote-openai` resource** as a standalone infrastructure page.
+10. **Address the hardcoded bearer token in App 2 mobile source** before any broader distribution.
 
 ### App-3 Follow-Ups
 
-- **TASK-0019 done (cross-app)** — superseded by TASK-0039 for the newer `Knowledge.Healthcare/logo.png` master. The old real-device validation follow-up is now tracked under `TASK-0041`, alongside the updated TASK-0039 surfaces.
+- **TASK-0019 done (cross-app)** — superseded by deployed `TASK-0039` for the newer `Knowledge.Healthcare/logo.png` master. Remaining branding follow-up is the still-deferred monochrome Android notification small icon.
 
-- **TASK-0039 done (cross-app)** — ANOTE-web and ANOTE_mobile assets regenerated from `/Users/ivananikin/Documents/Knowledge.Healthcare/logo.png` (`1254x1254`, RGBA, transparency present). Android clean build succeeded, emulator install/launch succeeded, and iOS/Android file-level asset generation was completed. Remaining stable-surface visual validation moved to `TASK-0041` because the Android emulator launcher became unstable during icon inspection and the host iOS Simulator failed to boot cleanly.
+- **TASK-0039 deployed (cross-app)** — ANOTE-web and ANOTE_mobile assets regenerated from `/Users/ivananikin/Documents/Knowledge.Healthcare/logo.png` (`1254x1254`, RGBA, transparency present), validated by the user on web and mobile, and reported live on the ANOTE-web host. `TASK-0041` validation follow-up is closed.
 - **TASK-0027 deployed** — the homepage `Features.tsx` anamneza animation expansion is now reported live on Azure, showing eight chips (`NO`, `RA`, `OA`, `FA`, `AA`, `GA`, `SA`, `EA`) with no `BouncingChips.tsx` changes required.
 - **TASK-0028 deployed** — the dedicated `/bezpecnost` page fix is now reported live on Azure, keeping only the route-level `PageHeader`, removing the duplicate `Privacy.tsx` heading/subheading, and tightening the top spacing above the shield.
 - **TASK-0018 deployed** — the duplicate heading fix is now reported live. Root cause was the route-level `PageHeader` plus a second internal heading inside `Pricing.tsx`; removing the inner heading block resolved both `/cenik` and `/en/pricing` while preserving spacing.
@@ -65,6 +63,10 @@
 - **TASK-0034 deployed (2026-05-01)** — live on Azure App Service `medical-advisor-cz` (https://medical-advisor-cz.azurewebsites.net). Deployment ID `e7d0e90f-d415-4529-be7f-08c6d6ebf3ae`. Production check confirmed full Czech disclaimer including "na rozdíl o vašeho lékaře" ✅. Caveat: deployed from an uncommitted working tree; follow-up git commit recommended.
 
 ## Recently Completed
+
+- 2026-05-08: `TASK-0040` deployed for ANOTE-web. Mobile navbar drawer used `inset-0 top-[72px]` which collapsed to `height:0`, leaving menu items unreadable over scrolled page content. Fixed in `src/components/layout/Navbar.tsx` by replacing it with explicit `left-0 right-0 top-[72px] bottom-0 h-[calc(100dvh-72px)]` and applying `bg-surface/95 backdrop-blur-xl` (near-opaque white + glass blur) to both the drawer and the header strip while `mobileOpen`. Validated on a 390×844 mobile viewport at scrolled position; top-of-page open state and desktop behavior unchanged. `npm run build` clean. Commit `8c06772` pushed to `origin/main` → Azure SWA `anote-web-weu` auto-deploy.
+
+- 2026-05-08: `TASK-0039` moved from `done` to `deployed` after the user confirmed successful testing on both web and mobile plus live deployment on the ANOTE-web host. Validation follow-up `TASK-0041` moved to `tested` and is now closed.
 
 - 2026-05-08: Triaged `TASK-0040` for ANOTE-web — mobile navbar background/readability bug when the hamburger menu is opened away from the top of the page. Single-app app-3 scope. Priority `medium`. Recommended status `active`. No spec recommended at triage.
 
