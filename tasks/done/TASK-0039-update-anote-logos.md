@@ -112,10 +112,10 @@ When this task is complete:
   - `flutter clean && flutter build apk --debug` succeeded and produced `mobile/build/app/outputs/flutter-apk/app-debug.apk`
   - `adb install -r build/app/outputs/flutter-apk/app-debug.apk` succeeded on emulator `emulator-5554`
   - `adb shell am start -n com.ivananikin.anote_mobile/.MainActivity` succeeded, confirming the updated package installs and launches cleanly on Android
+  - User manually reviewed the Android emulator launcher result on 2026-05-08 and confirmed the refreshed icon looks correct
 - Validation limits / deferrals:
-  - Android launcher-surface visual verification remained inconclusive because the emulator launcher became unstable (`System UI isn't responding`) while attempting to open the home/app-drawer surface for icon inspection
   - iOS Simulator visual verification remained blocked by the host simulator environment (`launchd` / boot error 60)
-  - Follow-up validation ticket created: `TASK-0041` for stable-surface confirmation of deployed/favicon and mobile launcher rendering
+  - Follow-up validation ticket created: `TASK-0041` for the remaining unverified surfaces (deployed ANOTE-web favicon and iOS icon rendering)
 
 ### 2026-05-08 — task closeout decision
 

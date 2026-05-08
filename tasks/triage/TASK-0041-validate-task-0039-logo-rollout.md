@@ -17,7 +17,7 @@ TASK-0039 completed the asset regeneration for both ANOTE-web and ANOTE_mobile u
 Specifically:
 
 1. ANOTE-web was locally reviewed and accepted, but the deployed favicon surface was not re-checked.
-2. Android clean build, install, and app launch succeeded on emulator `emulator-5554`, but the launcher surface became unstable (`System UI isn't responding`) during icon inspection, so launcher-mask rendering was not visually confirmed.
+2. Android clean build, install, and app launch succeeded on emulator `emulator-5554`, and the user subsequently confirmed the launcher icon looked correct in the emulator.
 3. iOS icon generation completed, but iOS Simulator visual verification remained blocked by a host boot / `launchd` failure.
 
 ## Desired Outcome
@@ -25,8 +25,7 @@ Specifically:
 When this task is complete:
 
 1. The deployed ANOTE-web favicon is visually confirmed to match the TASK-0039 logo master.
-2. The Android launcher icon is visually confirmed on at least one stable launcher surface after a clean install, ideally including adaptive-mask behavior.
-3. The iOS app icon is visually confirmed in Simulator or on-device after a clean build.
+2. The iOS app icon is visually confirmed in Simulator or on-device after a clean build.
 4. If any surface differs from the generated assets, the discrepancy is documented with screenshots and routed back into a new implementation task.
 
 ## Constraints
@@ -45,8 +44,7 @@ When this task is complete:
 ## Suggested Validation Plan
 
 1. Check the deployed ANOTE-web favicon in a real browser against the supplied master.
-2. On Android, perform `flutter clean` plus a fresh install on a stable emulator/device and capture the launcher/home surface with the ANOTE icon visible.
-3. On iOS, boot a working Simulator or device, build/install the app, and capture the icon in the app grid.
+2. On iOS, boot a working Simulator or device, build/install the app, and capture the icon in the app grid.
 4. Update task state to `done` or `tested` depending on whether all surfaces pass cleanly.
 
 ## Triage Assessment

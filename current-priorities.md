@@ -6,7 +6,7 @@
 
 - **Resolve production domain** — Replace all `// TODO: replace with production domain` placeholders (Azure hostname) across ANOTE-web once `anote.cz` goes live.
 - **Advance App 4 beyond MVP completion** — `Health-Analysis` MVP path is fully tested; the four post-MVP slices (`TASK-0030` Broz CSV + monthly/post-meal views, `TASK-0031` progressive analysis page + foldable Episodes table, `TASK-0032` Czech i18n + language switch, `TASK-0033` Broz/LibreView Czech CSV auto-mapping) are all `tested` as of 2026-04-29. **TASK-0034** (mandatory Czech safety disclaimer beneath dose-modification recommendations in Diabetický poradce 2 / app-1) is **deployed** to `medical-advisor-cz` as of 2026-05-01 — verified live in production. Remaining app-4 follow-ups: clinician review of the 8 `// TODO(i18n-review)` Czech strings; full Playwright e2e on the Broz upload path (analysis-page snapshot doesn't intersect it).
-- **Validate TASK-0041 logo rollout on stable real/deployed surfaces** — TASK-0039 completed the regenerated ANOTE-web and ANOTE_mobile assets, but stable-surface visual confirmation is still outstanding for the deployed ANOTE-web favicon, Android launcher icon mask/rendering, and iOS Simulator/device icon after a clean build.
+- **Validate TASK-0041 logo rollout on remaining real/deployed surfaces** — TASK-0039 completed the regenerated ANOTE-web and ANOTE_mobile assets. Android emulator visual validation is now confirmed by the user; the remaining gaps are the deployed ANOTE-web favicon and iOS Simulator/device icon after a clean build.
 
 ## In Progress
 
@@ -21,7 +21,7 @@
 ## Next Recommended Actions
 
 1. **Commit the `medical_advisor` working tree** — TASK-0034 was deployed from an uncommitted working tree. Commit the current state with a message capturing TASK-0034 and any other local changes so the deployed production state is traceable in version control.
-2. **Validate TASK-0041** on real/stable surfaces — browser favicon on deployed ANOTE-web, Android launcher icon on a stable device/emulator launcher surface, and iOS app icon on the iOS Simulator or device after a clean build.
+2. **Validate TASK-0041** on the remaining surfaces — browser favicon on deployed ANOTE-web and iOS app icon on the iOS Simulator or device after a clean build.
 3. **Provide a monochrome Android notification small icon master** for the new ANOTE logo and wire it into the `flutter_foreground_task` ForegroundService — deferred from `TASK-0019`.
 4. **Clinician review of 8 `// TODO(i18n-review)` Czech strings** in `web/lib/i18n/dictionaries/cs.ts` (TASK-0032 follow-up) — uncertain clinical wording flagged but not gating.
 5. **Full Playwright e2e on the Broz upload path** (TASK-0033 follow-up) — analysis-page snapshot doesn't intersect the upload flow; backend pytest 69/69 covers the contract but a visual upload-flow pass is still owed.
